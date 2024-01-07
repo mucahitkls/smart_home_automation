@@ -1,0 +1,16 @@
+# Folders
+venv
+venv/*
+__pycache__
+.DS_Store
+.Vagrant
+.Vagrant/*
+.idea
+.idea/*
+
+
+# Files
+
+.env
+
+
