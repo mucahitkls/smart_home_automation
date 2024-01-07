@@ -1,6 +1,10 @@
 from base_command import Command
 from receivers.thermostat import Thermostat
 import numbers
+from utils.logger import logger_setup
+
+logger = logger_setup(__name__)
+
 
 class TurnOnThermostatCommand(Command):
     def __init__(self, thermostat: Thermostat):
@@ -33,12 +37,11 @@ class ChangeTemperatureCommand(Command):
         if isinstance(self.value, numbers.Real) and self.thermostat.min_temp <= self.value <= self.thermostat.max_temp:
             self.thermostat.change_temperature(self.value)
         else:
-            print(f"{self.thermostat}: Invalid temperature value, operation failed...")
+            logger.error(f"{self.thermostat.name}: Invalid temperature value, operation failed...")
 
     def undo(self):
         if self.thermostat.history:
             last_value = self.thermostat.history.pop()
             self.thermostat.change_temperature(last_value)
         else:
-            print(f"{self.thermostat.name}: Thermostat there is nothing to undo...")
-
+            logger.warning(f"{self.thermostat.name}: Thermostat there is nothing to undo...")

@@ -1,6 +1,10 @@
-from base_command import Command
+from .base_command import Command
 from receivers.light import Light
 import numbers
+from utils.logger import logger_setup
+
+logger = logger_setup(__name__)
+
 
 class TurnOnLightCommand(Command):
     def __init__(self, light: Light):
@@ -33,11 +37,13 @@ class ChangeBrightnessCommand(Command):
         if isinstance(self.value, numbers.Real) and 0 <= self.value <= self.light.max_brightness:
             self.light.change_brightness(self.value)
         else:
-            print(f"{self.light}: Invalid brightness value, operation failed...")
+            logger.error(f"{self.light}: Invalid brightness value, operation failed...")
 
     def undo(self):
         if self.light.history:
             last_value = self.light.history.pop()
             self.light.change_brightness(last_value)
         else:
-            print(f"{self.light.name}: Light there is nothing to undo...")
+            logger.warning(f"{self.light.name}: Light there is nothing to undo...")
+
+
