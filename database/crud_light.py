@@ -6,4 +6,5 @@ from utils.logger import logger_setup
 
 logger = logger_setup(__name__)
 
-def get_light_by_id(db: Session, light_id: int ) -> Optional[]
+def get_light_by_id(db: Session, light_id: int ) -> Optional[any]:
+    pass

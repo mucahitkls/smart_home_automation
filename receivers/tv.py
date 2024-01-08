@@ -30,9 +30,7 @@ class Tv:
 
         self.min_volume = 0
         self.max_volume = get_max_volume(max_volume)
-        self.available_modes = self.available_modes = available_modes if available_modes is not None else ['Normal',
-                                                                                                           'Cinema',
-                                                                                                           'Sports']
+        self.available_modes = available_modes if available_modes is not None else ['Normal', 'Cinema', 'Sports', 'Game']
 
         self.channel = 1
         self.volume = 10
