@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class DeviceType(BaseModel):
     type_name: str
 

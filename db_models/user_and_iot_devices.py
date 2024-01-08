@@ -17,7 +17,7 @@ class User(Base):
     devices = relationship('Device', back_populates='owner')
 
 
-class DeviceType(Base):
+class DeviceTypeModel(Base):
     __tablename__ = 'device_types'
     device_type_id = Column(Integer, primary_key=True)
     type_name = Column(String(50), unique=True, nullable=False)

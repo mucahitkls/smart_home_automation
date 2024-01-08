@@ -7,12 +7,12 @@ class DeviceBase(BaseModel):
 
 
 class DeviceCreate(DeviceBase):
-    user_id: int
     device_type_id: int
 
 
 class Device(DeviceBase):
     device_id: int
+    user_id: int
 
     class Config:
         orm_mode = True
