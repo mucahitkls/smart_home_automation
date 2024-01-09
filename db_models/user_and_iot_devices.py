@@ -34,7 +34,7 @@ class Device(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, onupdate=datetime.utcnow)
     owner = relationship("User", back_populates='devices')
-    device_type = relationship('DeviceType', back_populates='devices')
+    device_type = relationship('DeviceTypeModel', back_populates='devices')
     light_attributes = relationship('LightAttributes', back_populates='device', uselist=False)
     thermostat_attributes = relationship('ThermostatAttributes', back_populates='device', uselist=False)
     tv_attributes = relationship('TvAttributes', back_populates='device', uselist=False)
@@ -67,7 +67,7 @@ class TvAttributes(Base):
     tv_id = Column(Integer, ForeignKey('devices.device_id'), primary_key=True)
     current_channel = Column(Integer)
     current_volume = Column(Integer)
-    current_mode = Column(String(50)),
+    current_mode = Column(String(50))
     max_channel = Column(Integer)
     max_volume = Column(Integer)
     available_modes = Column(JSON)
@@ -81,4 +81,5 @@ class DoorAttributes(Base):
     device = relationship('Device', back_populates='door_attributes')
 
 
+# Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)

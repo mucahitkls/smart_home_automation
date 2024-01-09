@@ -16,9 +16,12 @@ def get_device_type_by_id(db: Session, device_type_id: int) -> Optional[DeviceTy
         return None
 
 
-def get_device_type_by_name(db: Session, type_name: str):
+def create_or_get_device_type(db: Session, type_name: str):
     try:
-        return db.query(DeviceTypeModel).filter(DeviceTypeModel.type_name == type_name).first()
+        dt = db.query(DeviceTypeModel).filter(DeviceTypeModel.type_name == type_name).first()
+        if not dt:
+            dt = create_new_device_type(db=db, device_type_name=type_name)
+        return dt
     except SQLAlchemyError as e:
         logger.error(f"Error when retrieving device type by name: {type_name}: {e}")
         return None
