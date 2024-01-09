@@ -1,4 +1,5 @@
 from common_classes import CommonLockableDevice
+from receivers_schemas.door_schema import DoorDetails
 
 
 class Door:
@@ -22,6 +23,10 @@ class Door:
         return self.common_device.name
 
     @property
+    def device_type(self):
+        return self.common_device.device_type
+
+    @property
     def state(self):
         return self.common_device.state
 
@@ -29,9 +34,10 @@ class Door:
     def lock_state(self):
         return self.common_device.lock_state
 
-
-my_light = Door("Front Door")
-print(my_light.state)
-my_light.unlock()
-my_light.open()
-print(my_light.state)
+    def get_information(self):
+        return DoorDetails(
+            name=self.name,
+            device_type=self.device_type,
+            state=self.state,
+            lock_state=self.lock_state
+        )

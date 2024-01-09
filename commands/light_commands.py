@@ -76,3 +76,4 @@ class ChangeLightModeCommand(Command):
         else:
             logger.warning(f"Light: {self.light.name} -- there is nothing to undo...")
             raise NoUndoFoundException(self.light)
+

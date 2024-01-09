@@ -1,4 +1,5 @@
 from common_classes import CommonElectricalDevice, CommonChangeMode, CommonChangeIntegerValue
+from receivers_schemas.thermostat_schema import ThermostatDetails
 
 
 class Thermostat:
@@ -33,9 +34,27 @@ class Thermostat:
         return self.common_temperature_change.value
 
     @property
+    def min_temperature(self):
+        return self.common_temperature_change.min_value
+
+    def max_temperature(self):
+        return self.common_temperature_change.max_value
+
+    @property
     def mode(self):
         return self.common_mode.mode
 
     @property
     def available_modes(self):
         return self.common_mode.available_modes
+
+    def get_info(self):
+        return ThermostatDetails(
+            name=self.name,
+            state=self.state,
+            temperature=self.temperature,
+            min_temperature=self.min_temperature,
+            max_temperature=self.max_temperature,
+            mode=self.mode,
+            available_modes=self.available_modes
+        )
