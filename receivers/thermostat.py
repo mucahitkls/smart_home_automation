@@ -57,7 +57,7 @@ class Thermostat:
             device_type=self.device_type,
             name=self.name,
             state=self.state,
-            temperature=self.temperature,
+            current_temperature=self.temperature,
             min_temperature=self.min_temperature,
             max_temperature=self.max_temperature,
             mode=self.mode,

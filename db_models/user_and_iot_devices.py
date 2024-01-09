@@ -1,5 +1,5 @@
 from database.database import Base, engine
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -44,9 +44,10 @@ class Device(Base):
 class LightAttributes(Base):
     __tablename__ = 'light_attributes'
     light_id = Column(Integer, ForeignKey('devices.device_id'), primary_key=True)
-    brightness = Column(Integer)
     color = Column(String(50))
+    brightness = Column(Integer)
     mode = Column(String(50))
+    available_modes = Column(JSON)
     device = relationship('Device', back_populates='light_attributes')
 
 
@@ -54,8 +55,10 @@ class ThermostatAttributes(Base):
     __tablename__ = 'thermostat_attributes'
     thermostat_id = Column(Integer, ForeignKey('devices.device_id'), primary_key=True)
     current_temperature = Column(Integer)
-    target_temperature = Column(Integer)
+    min_temperature = Column(Integer)
+    max_temperature = Column(Integer)
     mode = Column(String(50))
+    available_modes = Column(JSON)
     device = relationship('Device', back_populates='thermostat_attributes')
 
 
@@ -64,14 +67,16 @@ class TvAttributes(Base):
     tv_id = Column(Integer, ForeignKey('devices.device_id'), primary_key=True)
     current_channel = Column(Integer)
     current_volume = Column(Integer)
-    current_mode = Column(String(50))
+    current_mode = Column(String(50)),
+    max_channel = Column(Integer)
+    max_volume = Column(Integer)
+    available_modes = Column(JSON)
     device = relationship('Device', back_populates='tv_attributes')
 
 
 class DoorAttributes(Base):
     __tablename__ = 'door_attributes'
     door_id = Column(Integer, ForeignKey('devices.device_id'), primary_key=True)
-    door_state = Column(String(50))
     lock_state = Column(String(50))
     device = relationship('Device', back_populates='door_attributes')
 

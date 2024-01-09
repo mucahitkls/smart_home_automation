@@ -36,8 +36,8 @@ class Door:
 
     def get_information(self):
         return DoorDetails(
-            name=self.name,
             device_type=self.device_type,
+            name=self.name,
             state=self.state,
             lock_state=self.lock_state
         )
