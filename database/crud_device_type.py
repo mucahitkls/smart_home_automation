@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Type
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from db_models.user_and_iot_devices import DeviceTypeModel
@@ -7,6 +7,13 @@ from utils.logger import logger_setup
 
 logger = logger_setup(__name__)
 
+
+def get_all_device_types(db: Session, skip: int = 0, limit: int = 100) -> list[Type[DeviceTypeResponse]] | None:
+    try:
+        return db.query(DeviceTypeModel).offset(skip=skip).limit(limit=limit).all()
+    except SQLAlchemyError as e:
+        logger.error(f'Error when getting all devices types: {e}')
+        return None
 
 def get_device_type_by_id(db: Session, device_type_id: int) -> Optional[DeviceTypeResponse]:
     try:
@@ -58,14 +65,15 @@ def update_device_type(db: Session, device_type: DeviceTypeResponse) -> Optional
         return None
 
 
-def delete_device_type(db: Session, device_type: DeviceTypeResponse):
-    db_device_type = get_device_type_by_id(db=db, device_type_id=device_type.device_type_id)
+def delete_device_type(db: Session, device_type_id: int):
+    db_device_type = get_device_type_by_id(db=db, device_type_id=device_type_id)
     if not db_device_type:
         return False
     try:
         db.delete(db_device_type)
         db.commit()
     except SQLAlchemyError as e:
-        logger.error(f"Error when deleting device type by name: {device_type.type_name}: {e}")
+        logger.error(f"Error when deleting device type by id: {device_type_id}: {e}")
     finally:
         db.close()
+
