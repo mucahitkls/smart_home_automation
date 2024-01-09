@@ -1,4 +1,5 @@
 from common_classes import CommonElectricalDevice, CommonChangeColor, CommonChangeBrightness, CommonChangeMode
+from receivers_schemas.light_schema import LightDetails
 
 
 class Light:
@@ -7,6 +8,7 @@ class Light:
         self.common_color = CommonChangeColor(name, color)
         self.common_brightness = CommonChangeBrightness(name, self.common_device.state, is_dimmable)
         self.common_mode = CommonChangeMode(name, available_modes)
+        self.max_brightness = 100
 
     def turn_on(self):
         self.common_device.turn_on()
@@ -24,6 +26,11 @@ class Light:
         self.common_mode.change_mode(mode)
 
     # If needed, you can add methods to get the current state, color, brightness, and mode
+
+    @property
+    def name(self):
+        return self.common_device.name
+
     @property
     def state(self):
         return self.common_device.state
@@ -40,4 +47,16 @@ class Light:
     def mode(self):
         return self.common_mode.mode
 
+    @property
+    def available_modes(self):
+        return self.common_mode.available_modes
 
+    def get_information(self):
+        return LightDetails(
+            name=self.name,
+            state=self.state,
+            color=self.color,
+            brightness=self.brightness,
+            mode=self.mode,
+            available_modes=self.available_modes
+        )

@@ -1,6 +1,6 @@
 from .base_command import Command
 from receivers.light import Light
-from receivers.exceptions import InvalidValueException, InvalidColorException, InvalidModeException, NoUndoFoundException
+from receivers.exceptions import InvalidValueException, InvalidModeException, NoUndoFoundException
 import numbers
 from utils.logger import logger_setup
 
@@ -19,7 +19,6 @@ class TurnOnLightCommand(Command):
     def undo(self):
         if self.previous_state == 'off':
             self.light.turn_off()
-
 
 
 class TurnOffLightCommand(Command):
@@ -55,7 +54,8 @@ class ChangeBrightnessCommand(Command):
             self.light.change_brightness(self.previous_brightness)
         else:
             logger.error(f'Light: {self.light.name} -- there is nothing to undo...')
-            raise
+            raise NoUndoFoundException(self.light)
+
 
 class ChangeLightModeCommand(Command):
     def __init__(self, light: Light, mode: str):
@@ -69,10 +69,10 @@ class ChangeLightModeCommand(Command):
         else:
             logger.warning(f"Light: {self.light.name} -- invalid mode: {self.mode}, operation failed...")
             raise InvalidModeException(mode=self.mode, available_modes=self.light.available_modes)
+
     def undo(self):
-        if self.light.mode_history:
-            last_mode = self.light.mode_history.pop()
-            self.light.change_mode(last_mode)
+        if self.previous_mode:
+            self.light.change_mode(self.previous_mode)
         else:
             logger.warning(f"Light: {self.light.name} -- there is nothing to undo...")
-
+            raise NoUndoFoundException(self.light)

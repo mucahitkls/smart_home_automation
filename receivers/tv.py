@@ -1,9 +1,10 @@
 from common_classes import CommonElectricalDevice, CommonChangeMode, CommonChangeIntegerValue
 from typing import Optional, List
+from receivers_schemas.tv_schema import TvDetails
 
 
 class Tv:
-    def __init__(self, name: str, color: str, max_channel: int = 10000, max_volume: int = 100,
+    def __init__(self, name: str, max_channel: int = 10000, max_volume: int = 100,
                  available_modes=Optional[List[str]]):
         def get_max_value(value, return_value):
             if isinstance(value, int) and value > 1:
@@ -11,8 +12,8 @@ class Tv:
             return return_value
 
         self.common_device = CommonElectricalDevice(name)
-        self.common_channel = CommonChangeIntegerValue(name, 'channel', 0, get_max_value(max_channel))
-        self.common_volume = CommonChangeIntegerValue(name, 'volume', 0, get_max_value(max_volume))
+        self.common_channel = CommonChangeIntegerValue(name, 'channel', 1, get_max_value(max_channel, 10000))
+        self.common_volume = CommonChangeIntegerValue(name, 'volume', 0, get_max_value(max_volume, 100))
         self.common_mode = CommonChangeMode(name, available_modes)
 
     def turn_on(self):
@@ -49,3 +50,28 @@ class Tv:
     @property
     def mode(self):
         return self.common_mode.mode
+
+    @property
+    def available_modes(self):
+        return self.common_mode.available_modes
+
+    @property
+    def max_channel(self):
+        return self.common_channel.max_value
+
+    @property
+    def max_volume(self):
+        return self.common_volume.max_value
+
+    def get_details(self):
+
+        return TvDetails(
+            name=self.name,
+            state=self.state,
+            current_channel=self.channel,
+            current_volume=self.volume,
+            current_mode=self.mode,
+            max_channel=self.max_channel,
+            max_volume=self.max_volume,
+            available_modes=self.available_modes
+        )

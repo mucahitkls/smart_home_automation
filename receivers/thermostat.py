@@ -35,3 +35,7 @@ class Thermostat:
     @property
     def mode(self):
         return self.common_mode.mode
+
+    @property
+    def available_modes(self):
+        return self.common_mode.available_modes
