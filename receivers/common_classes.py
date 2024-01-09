@@ -5,7 +5,7 @@ from exceptions import InvalidColorException, InvalidModeException, InvalidValue
 logger = logger_setup(__name__)
 
 
-class CommonDevice:
+class CommonElectricalDevice:
 
     def __init__(self, name: str, state: str = 'off'):
         self.name = name
@@ -18,6 +18,49 @@ class CommonDevice:
     def turn_off(self):
         self.state = 'off'
         logger.info(f'{self.name} -- turned off')
+
+
+class CommonLockableDevice:
+
+    def __init__(self, device_type: str, name: str):
+        self.name = name
+        self.device_type = device_type
+        self.state = 'closed'
+        self.lock_state = 'locked'
+
+    def open(self):
+        if self.lock_state == 'locked':
+            logger.info(f'{self.name} -- cannot open {self.device_type} it is locked')
+            return
+        if self.state == 'closed':
+            self.state = 'open'
+            logger.info(f'{self.name} -- {self.device_type} opened')
+            return
+        logger.info(f'{self.name} -- {self.device_type} is already open')
+
+    def close(self):
+        if self.state == 'open':
+            self.state = 'closed'
+            logger.info(f'{self.name} -- {self.device_type} closed')
+            return
+        logger.info(f'{self.name} -- {self.device_type} is already closed')
+
+    def lock(self):
+        if self.state == 'open':
+            logger.info(f'{self.name}: Cannot lock the door; it is open.')
+            return
+        if self.lock_state == 'unlocked':
+            self.lock_state = 'locked'
+            logger.info(f'{self.name} -- {self.device_type} locked')
+            return
+        logger.info(f'{self.name} -- {self.device_type} is already locked')
+
+    def unlock(self):
+        if self.lock_state == 'locked':
+            self.lock_state = 'unlocked'
+            logger.info(f'{self.name} -- {self.device_type} unlocked')
+            return
+        logger.info(f'{self.name} -- {self.device_type} is already unlocked')
 
 
 class CommonChangeColor:
@@ -50,7 +93,6 @@ class CommonChangeBrightness:
         if not self.is_dimmable:
             logger.info(f'{self.name} -- light is not dimmable')
             raise NotDimmableDevice(self.name)
-
         new_value = max(0, min(value, self.max_brightness))
         if self.brightness != new_value:
             self.state = 'off' if new_value == 0 else 'on'
@@ -64,8 +106,7 @@ class CommonChangeMode:
     def __init__(self, name: str, available_modes: list):
         self.name = name
         self.mode = 'Normal'
-        self.available_modes = available_modes if available_modes is not None else ['Normal', 'Cinema', 'Sports',
-                                                                                    'Game']
+        self.available_modes = available_modes if available_modes is not None else ['Normal']
 
     def change_mode(self, mode: str):
         if mode not in self.available_modes:
@@ -94,3 +135,10 @@ class CommonChangeIntegerValue:
             logger.info(f'{self.name} -- {self.attribute} is set to {new_value}')
         else:
             logger.info(f'{self.name} -- {self.attribute} is already set to {new_value}')
+
+
+class CommonChangeLock:
+
+    def __init__(self, name: str):
+        self.name = name
+        self.lock_state = 'locked'
