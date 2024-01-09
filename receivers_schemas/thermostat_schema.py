@@ -3,6 +3,7 @@ from typing import Optional, List
 
 
 class ThermostatDetails(BaseModel):
+    device_type: str
     name: str
     state: str
     temperature: int

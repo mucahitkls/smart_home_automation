@@ -5,7 +5,7 @@ from receivers_schemas.thermostat_schema import ThermostatDetails
 class Thermostat:
 
     def __init__(self, name: str, available_modes: list, min_temp: int = -10, max_temp: int = 120):
-        self.common_device = CommonElectricalDevice(name)
+        self.common_device = CommonElectricalDevice(device_type='Thermostat', name=name)
         self.common_mode = CommonChangeMode(name, available_modes)
         self.common_temperature_change = CommonChangeIntegerValue(name, 'temperature', min_temp, max_temp)
 
@@ -20,6 +20,10 @@ class Thermostat:
 
     def change_mode(self, mode):
         self.common_mode.change_mode(mode=mode)
+
+    @property
+    def device_type(self):
+        return self.common_device.device_type
 
     @property
     def name(self):
@@ -50,6 +54,7 @@ class Thermostat:
 
     def get_info(self):
         return ThermostatDetails(
+            device_type=self.device_type,
             name=self.name,
             state=self.state,
             temperature=self.temperature,

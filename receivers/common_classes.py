@@ -1,13 +1,14 @@
 from utils.logger import logger_setup
 from utils.utilities import is_valid_hex_color
-from exceptions import InvalidColorException, InvalidModeException, InvalidValueException, NotDimmableDevice
+from .exceptions import InvalidColorException, InvalidModeException, InvalidValueException, NotDimmableDevice
 
 logger = logger_setup(__name__)
 
 
 class CommonElectricalDevice:
 
-    def __init__(self, name: str, state: str = 'off'):
+    def __init__(self, device_type: str, name: str, state: str = 'off'):
+        self.device_type = type
         self.name = name
         self.state = state
 

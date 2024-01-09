@@ -3,6 +3,7 @@ from typing import Optional, List
 
 
 class TvDetails(BaseModel):
+    device_type: str
     name: str
     state: str
     current_channel: int

@@ -1,5 +1,6 @@
-from base_command import Command
+from .base_command import Command
 from receivers.tv import Tv
+from receivers.exceptions import InvalidModeException
 import numbers
 
 
@@ -81,6 +82,7 @@ class ChangeTVModeCommand(Command):
             self.tv.change_mode(self.mode)
         else:
             print(f"{self.tv.name}: Invalid mode value, operation failed...")
+            raise InvalidModeException(self.mode, self.tv.available_modes)
 
     def undo(self):
         if self.previous_mode:

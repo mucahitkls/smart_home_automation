@@ -1,4 +1,4 @@
-from common_classes import CommonElectricalDevice, CommonChangeMode, CommonChangeIntegerValue
+from .common_classes import CommonElectricalDevice, CommonChangeMode, CommonChangeIntegerValue
 from typing import Optional, List
 from receivers_schemas.tv_schema import TvDetails
 
@@ -11,7 +11,7 @@ class Tv:
                 return value
             return return_value
 
-        self.common_device = CommonElectricalDevice(name)
+        self.common_device = CommonElectricalDevice(device_type='TV', name=name)
         self.common_channel = CommonChangeIntegerValue(name, 'channel', 1, get_max_value(max_channel, 10000))
         self.common_volume = CommonChangeIntegerValue(name, 'volume', 0, get_max_value(max_volume, 100))
         self.common_mode = CommonChangeMode(name, available_modes)
@@ -30,6 +30,10 @@ class Tv:
 
     def change_mode(self, mode: str):
         self.common_mode.change_mode(mode=mode)
+
+    @property
+    def device_type(self):
+        return self.common_device.device_type
 
     @property
     def name(self):
@@ -66,6 +70,7 @@ class Tv:
     def get_details(self):
 
         return TvDetails(
+            device_type=self.device_type,
             name=self.name,
             state=self.state,
             current_channel=self.channel,

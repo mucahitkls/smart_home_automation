@@ -4,7 +4,7 @@ from receivers_schemas.light_schema import LightDetails
 
 class Light:
     def __init__(self, name: str, color: str, available_modes: list, is_dimmable: bool = False):
-        self.common_device = CommonElectricalDevice(name)
+        self.common_device = CommonElectricalDevice(device_type='Light', name=name)
         self.common_color = CommonChangeColor(name, color)
         self.common_brightness = CommonChangeBrightness(name, self.common_device.state, is_dimmable)
         self.common_mode = CommonChangeMode(name, available_modes)
@@ -26,6 +26,10 @@ class Light:
         self.common_mode.change_mode(mode)
 
     # If needed, you can add methods to get the current state, color, brightness, and mode
+
+    @property
+    def device_type(self):
+        return self.common_device.device_type
 
     @property
     def name(self):
@@ -53,6 +57,7 @@ class Light:
 
     def get_information(self):
         return LightDetails(
+            device_type=self.device_type,
             name=self.name,
             state=self.state,
             color=self.color,

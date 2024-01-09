@@ -3,6 +3,7 @@ from typing import Optional, List
 
 
 class LightDetails(BaseModel):
+    device_type: str
     name: str
     state: str
     color: str
