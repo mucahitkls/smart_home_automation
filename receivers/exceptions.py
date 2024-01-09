@@ -38,3 +38,13 @@ class NoUndoFoundException(Exception):
 
     def __str__(self):
         return f'{self.__class__.__name__}: {self.message}'
+
+
+class NotDimmableDevice(Exception):
+    def __init__(self, thing, message="Device is not dimmable"):
+        self.thing = thing
+        self.message = f'{message} : {self.thing.name}'
+        super().__init__(self.message)
+
+    def __str__(self):
+        return f'{self.__class__.__name__}: {self.message}'
