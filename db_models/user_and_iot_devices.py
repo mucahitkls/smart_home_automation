@@ -14,14 +14,14 @@ class User(Base):
     last_login = Column(DateTime)
     status = Column(String(20), default='active')
     privileges = Column(String(20), default='regular')
-    devices = relationship('Device', back_populates='owner')
+    devices = relationship('Device', back_populates='owner', cascade='all, delete-orphan')
 
 
 class DeviceTypeModel(Base):
     __tablename__ = 'device_types'
     device_type_id = Column(Integer, primary_key=True)
     type_name = Column(String(50), unique=True, nullable=False)
-    devices = relationship('Device', back_populates='device_type')
+    devices = relationship('Device', back_populates='device_type', cascade='all, delete-orphan')
 
 
 class Device(Base):
@@ -35,10 +35,10 @@ class Device(Base):
     updated_at = Column(DateTime, onupdate=datetime.utcnow)
     owner = relationship("User", back_populates='devices')
     device_type = relationship('DeviceTypeModel', back_populates='devices')
-    light_attributes = relationship('LightAttributes', back_populates='device', uselist=False)
-    thermostat_attributes = relationship('ThermostatAttributes', back_populates='device', uselist=False)
-    tv_attributes = relationship('TvAttributes', back_populates='device', uselist=False)
-    door_attributes = relationship('DoorAttributes', back_populates='device', uselist=False)
+    light_attributes = relationship('LightAttributes', back_populates='device', cascade='all, delete-orphan', uselist=False)
+    thermostat_attributes = relationship('ThermostatAttributes', back_populates='device', cascade='all, delete-orphan', uselist=False)
+    tv_attributes = relationship('TvAttributes', back_populates='device', cascade='all, delete-orphan', uselist=False)
+    door_attributes = relationship('DoorAttributes', back_populates='device', cascade='all, delete-orphan', uselist=False)
 
 
 class LightAttributes(Base):

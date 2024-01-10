@@ -15,6 +15,7 @@ def get_all_device_types(db: Session, skip: int = 0, limit: int = 100) -> list[T
         logger.error(f'Error when getting all devices types: {e}')
         return None
 
+
 def get_device_type_by_id(db: Session, device_type_id: int) -> Optional[DeviceTypeResponse]:
     try:
         return db.query(DeviceTypeModel).filter(DeviceTypeModel.device_type_id == device_type_id).first()
@@ -76,4 +77,3 @@ def delete_device_type(db: Session, device_type_id: int):
         logger.error(f"Error when deleting device type by id: {device_type_id}: {e}")
     finally:
         db.close()
-
